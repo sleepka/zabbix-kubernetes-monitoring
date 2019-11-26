@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 
-# Zabbix Kubernetes monitoring
-# https://github.com/sleepka/zabbix-kubernetes-monitoring
-# by Viktor Kravchenko (cryptox@cryptox.net)
-
 import subprocess
 import sys
 import os
@@ -28,7 +24,7 @@ def rawdata(qtime=30):
             rawdata=file.read()
             file.close()
         else:
-            rawdata = subprocess.check_output(kubectl + ' get ' + sys.argv[2] +' -A -o json',shell=True)
+            rawdata = subprocess.check_output(kubectl + ' get ' + target +' -A -o json',shell=True)
             file = open(tmp_file,'w')
             file.write(rawdata)
             file.close()
@@ -105,4 +101,3 @@ if sys.argv[2] in targets:
                                 break
 else:
 	result['data'].append({'Error':'No such target '+sys.argv[2]})
-

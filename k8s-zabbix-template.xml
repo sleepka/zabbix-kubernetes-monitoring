@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.2</version>
-    <date>2019-11-26T07:43:07Z</date>
+    <date>2019-11-26T11:08:49Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -57,7 +57,7 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>ApiServices: name[{#NAME}] Status Available</name>
+                            <name>ApiServices: {#NAME} Status Available</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -327,7 +327,7 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>ComponentStatuses: name[{#NAME}] Status Healthy</name>
+                            <name>ComponentStatuses: {#NAME} Status Healthy</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -462,7 +462,7 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>Pod: ns[{#NAMESPACE}] name[{#NAME}] container[{#CONTAINER}] Status Ready</name>
+                            <name>Pod {#NAME} container {#CONTAINER} (ns {#NAMESPACE}) Status Ready</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -522,7 +522,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Pod: ns[{#NAMESPACE}] name[{#NAME}] container[{#CONTAINER}] Restart Count</name>
+                            <name>Pod {#NAME} container {#CONTAINER} (ns {#NAMESPACE}) Restart Count</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -584,7 +584,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Kubernetes:k8s.stats[pods,{#NAMESPACE},{#NAME},containerReady,{#CONTAINER}].last()}=0</expression>
+                            <expression>{Kubernetes:k8s.stats[pods,{#NAMESPACE},{#NAME},containerReady,{#CONTAINER}].str(True)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>Pod {#NAME} container {#CONTAINER} (ns {#NAMESPACE}) is not in Ready State</name>
@@ -673,7 +673,7 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>Deployments: ns[{#NAMESPACE}] name[{#NAME}] NOT UPDATED replicas</name>
+                            <name>Deployments: {#NAME} (ns {#NAMESPACE}) NOT UPDATED replicas</name>
                             <type>15</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -733,7 +733,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Deployments: ns[{#NAMESPACE}] name[{#NAME}] Desired replicas</name>
+                            <name>Deployments: {#NAME} (ns {#NAMESPACE}) Desired replicas</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -793,7 +793,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Deployments: ns[{#NAMESPACE}] name[{#NAME}] Status</name>
+                            <name>Deployments: {#NAME} (ns {#NAMESPACE}) Status</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -853,7 +853,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Deployments: ns[{#NAMESPACE}] name[{#NAME}] UPDATED replicas</name>
+                            <name>Deployments: {#NAME} (ns {#NAMESPACE}) UPDATED replicas</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -1004,7 +1004,7 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>Node: [{#NAME}] Status: DiskPressure</name>
+                            <name>Node: {#NAME} Status: DiskPressure</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -1064,7 +1064,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Node: [{#NAME}] Status: MemoryPressure</name>
+                            <name>Node: {#NAME} Status: MemoryPressure</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -1124,7 +1124,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Node: [{#NAME}] Status: OutOfDisk</name>
+                            <name>Node: {#NAME} Status: OutOfDisk</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -1184,7 +1184,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Node: [{#NAME}] Status: PIDPressure</name>
+                            <name>Node: {#NAME} Status: PIDPressure</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -1367,7 +1367,7 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>Pod: ns[{#NAMESPACE}] name[{#NAME}] Phase</name>
+                            <name>Pod: {#NAME} (ns {#NAMESPACE}) Phase</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -1427,7 +1427,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Pod: ns[{#NAMESPACE}] name[{#NAME}] Status Ready</name>
+                            <name>Pod: {#NAME} (ns {#NAMESPACE}) Status Ready</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
@@ -1487,7 +1487,7 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Pod: ns[{#NAMESPACE}] name[{#NAME}] Status Failed, Reason Evicted</name>
+                            <name>Pod: {#NAME} (ns {#NAMESPACE}) Status Failed, Reason Evicted</name>
                             <type>7</type>
                             <snmp_community/>
                             <snmp_oid/>
