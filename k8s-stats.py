@@ -28,7 +28,8 @@ def rawdata(qtime=30):
             file = open(tmp_file,'w')
             file.write(rawdata)
             file.close()
-            #os.chmod(tmp_file, 0o666) if !tmp_file_exists
+            if not tmp_file_exists:
+                os.chmod(tmp_file, 0o666)
         return rawdata
     else:
         return false
