@@ -5,15 +5,23 @@ import sys
 import os
 import json
 import time
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
 
-os.environ["KUBECONFIG"] = "/var/lib/zabbix/.kube/config"
-
-kubectl='/usr/bin/kubectl' if os.path.isfile('/usr/bin/kubectl') else '/usr/local/bin/kubectl'
-
-result = {'data':[]}
+api_server = 'https://API_SERVER_URL'
+token = 'TOKEN'
 
 targets = ['pods','nodes','containers','deployments','apiservices','componentstatuses']
-target = 'pods' if sys.argv[2] == 'containers' else sys.argv[2]
+target = 'pods' if 'containers' == sys.argv[2] else sys.argv[2]
+
+if 'pods' == target or 'nodes' == target or 'componentstatuses' == target:
+    api_req = '/api/v1/'+target
+elif 'deployments' == target:
+    api_req = '/apis/apps/v1/'+target
+elif 'apiservices' == target:
+    api_req = '/apis/apiregistration.k8s.io/v1/'+target
 
 def rawdata(qtime=30):
     if sys.argv[2] in targets:
@@ -24,7 +32,10 @@ def rawdata(qtime=30):
             rawdata=file.read()
             file.close()
         else:
-            rawdata = subprocess.check_output(kubectl + ' get ' + target +' -A -o json',shell=True)
+            req = urllib2.Request(api_server + api_req)
+            req.add_header('Authorization', 'Bearer ' + token)
+            rawdata = urllib2.urlopen(req).read()
+
             file = open(tmp_file,'w')
             file.write(rawdata)
             file.close()
@@ -34,11 +45,16 @@ def rawdata(qtime=30):
     else:
         return false
 
+
 if sys.argv[2] in targets:
 
-	if 'discovery' in sys.argv[1]:
+	if 'discovery' == sys.argv[1]:
+
 	    # discovery
+
+            result = {'data':[]}
             data = json.loads(rawdata())
+
             for item in data['items']:            
                 if 'nodes' == sys.argv[2] or 'componentstatuses' == sys.argv[2] or 'apiservices' == sys.argv[2]:
 		    result['data'].append({'{#NAME}':item['metadata']['name']})
@@ -47,12 +63,16 @@ if sys.argv[2] in targets:
 		        result['data'].append({'{#NAME}':item['metadata']['name'],'{#NAMESPACE}':item['metadata']['namespace'],'{#CONTAINER}':cont['name']})
 		else:
 		    result['data'].append({'{#NAME}':item['metadata']['name'],'{#NAMESPACE}':item['metadata']['namespace']})
+
             print json.dumps(result)
 
-	elif 'stats' in sys.argv[1]:
+	elif 'stats' == sys.argv[1]:
+
 	    # stats
+
             data = json.loads(rawdata(100))
-            if 'pods' == sys.argv[2] or 'deployments' == sys.argv[2]:
+
+            if 'pods' == sys.argv[2] == 'pods' or 'deployments' == sys.argv[2]:
                 for item in data['items']:
                     if item['metadata']['namespace'] == sys.argv[3] and item['metadata']['name'] == sys.argv[4]:
                         if 'statusPhase' == sys.argv[5]:
@@ -100,5 +120,3 @@ if sys.argv[2] in targets:
                             if status['type'] == sys.argv[4]:
                                 print status['status']
                                 break
-else:
-	result['data'].append({'Error':'No such target '+sys.argv[2]})
