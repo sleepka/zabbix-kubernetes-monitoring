@@ -36,7 +36,7 @@ def rawdata(qtime=30):
             req.add_header('Authorization', 'Bearer ' + token)
             rawdata = urllib2.urlopen(req).read()
 
-            file = open(tmp_file,'w')
+            file = open(tmp_file,'wb')
             file.write(rawdata)
             file.close()
             if not tmp_file_exists:
@@ -48,7 +48,7 @@ def rawdata(qtime=30):
 
 if sys.argv[2] in targets:
 
-	if 'discovery' == sys.argv[1]:
+        if 'discovery' == sys.argv[1]:
 
 	    # discovery
 
@@ -57,18 +57,18 @@ if sys.argv[2] in targets:
 
             for item in data['items']:            
                 if 'nodes' == sys.argv[2] or 'componentstatuses' == sys.argv[2] or 'apiservices' == sys.argv[2]:
-		    result['data'].append({'{#NAME}':item['metadata']['name']})
-	        elif 'containers' == sys.argv[2]:
-		    for cont in item['spec']['containers']:
-		        result['data'].append({'{#NAME}':item['metadata']['name'],'{#NAMESPACE}':item['metadata']['namespace'],'{#CONTAINER}':cont['name']})
-		else:
-		    result['data'].append({'{#NAME}':item['metadata']['name'],'{#NAMESPACE}':item['metadata']['namespace']})
+                    result['data'].append({'{#NAME}':item['metadata']['name']})
+                elif 'containers' == sys.argv[2]:
+                    for cont in item['spec']['containers']:
+                        result['data'].append({'{#NAME}':item['metadata']['name'],'{#NAMESPACE}':item['metadata']['namespace'],'{#CONTAINER}':cont['name']})
+                else:
+                    result['data'].append({'{#NAME}':item['metadata']['name'],'{#NAMESPACE}':item['metadata']['namespace']})
 
-            print json.dumps(result)
+            print(json.dumps(result))
 
-	elif 'stats' == sys.argv[1]:
+        elif 'stats' == sys.argv[1]:
 
-	    # stats
+            # stats
 
             data = json.loads(rawdata(100))
 
@@ -76,47 +76,48 @@ if sys.argv[2] in targets:
                 for item in data['items']:
                     if item['metadata']['namespace'] == sys.argv[3] and item['metadata']['name'] == sys.argv[4]:
                         if 'statusPhase' == sys.argv[5]:
-                            print item['status']['phase']
+                            print(item['status']['phase'])
                         elif 'statusReason' == sys.argv[5]:
-                            print item['status']['reason'] if 'reason' in item['status'] else 'none'
+                            if 'reason' in item['status']:
+                                print (item['status']['reason'])
                         elif 'statusReady' == sys.argv[5]:
                             for status in item['status']['conditions']:
                                 if status['type'] == 'Ready' or (status['type'] == 'Available' and 'deployments' == sys.argv[2]):
-                                    print status['status']
+                                    print(status['status'])
                                     break
                         elif 'containerReady' == sys.argv[5]:
                             for status in item['status']['containerStatuses']:
                                 if status['name'] == sys.argv[6]:
-                                    print status['ready']
+                                    print(status['ready'])
                                     break
                         elif 'containerRestarts' == sys.argv[5]:
                             for status in item['status']['containerStatuses']:
                                 if status['name'] == sys.argv[6]:
-                                    print status['restartCount']
+                                    print(status['restartCount'])
                                     break
                         elif 'Replicas' == sys.argv[5]:
-                            print item['spec']['replicas']
+                            print (item['spec']['replicas'])
                         elif 'updatedReplicas' == sys.argv[5]:
-                            print item['status']['updatedReplicas']
+                            print (item['status']['updatedReplicas'])
                         break
             if 'nodes' == sys.argv[2]:
                 for item in data['items']:
                     if item['metadata']['name'] == sys.argv[3]:
                         for status in item['status']['conditions']:
                             if status['type'] == sys.argv[4]:
-                                print status['status']
+                                print(status['status'])
                                 break
             if 'componentstatuses' == sys.argv[2]:
                 for item in data['items']:
                     if item['metadata']['name'] == sys.argv[3]:
                         for status in item['conditions']:
                             if status['type'] == sys.argv[4]:
-                                print status['status']
+                                print(status['status'])
                                 break
             if 'apiservices' == sys.argv[2]:
                 for item in data['items']:
                     if item['metadata']['name'] == sys.argv[3]:
                         for status in item['status']['conditions']:
                             if status['type'] == sys.argv[4]:
-                                print status['status']
+                                print(status['status'])
                                 break
