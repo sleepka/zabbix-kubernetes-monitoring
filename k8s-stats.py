@@ -72,7 +72,7 @@ if sys.argv[2] in targets:
 
             data = json.loads(rawdata(100))
 
-            if 'pods' == sys.argv[2] == 'pods' or 'deployments' == sys.argv[2]:
+            if 'pods' == sys.argv[2] or 'deployments' == sys.argv[2]:
                 for item in data['items']:
                     if item['metadata']['namespace'] == sys.argv[3] and item['metadata']['name'] == sys.argv[4]:
                         if 'statusPhase' == sys.argv[5]:
