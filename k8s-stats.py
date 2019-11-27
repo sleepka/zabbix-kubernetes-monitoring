@@ -27,7 +27,7 @@ def rawdata(qtime=30):
     if sys.argv[2] in targets:
         tmp_file='/tmp/zbx-'+target+'.tmp'
         tmp_file_exists=True if os.path.isfile(tmp_file) else False
-        if os.path.isfile(tmp_file) and (time.time()-os.path.getmtime(tmp_file)) <= qtime:
+        if tmp_file_exists and (time.time()-os.path.getmtime(tmp_file)) <= qtime:
             file = open(tmp_file,'r')
             rawdata=file.read()
             file.close()
