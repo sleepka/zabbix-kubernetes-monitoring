@@ -50,7 +50,7 @@ if sys.argv[2] in targets:
 
         if 'discovery' == sys.argv[1]:
 
-	    # discovery
+            # discovery
 
             result = {'data':[]}
             data = json.loads(rawdata())
