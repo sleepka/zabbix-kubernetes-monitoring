@@ -100,24 +100,17 @@ if sys.argv[2] in targets:
                         elif 'updatedReplicas' == sys.argv[5]:
                             print (item['status']['updatedReplicas'])
                         break
-            if 'nodes' == sys.argv[2]:
+            if 'nodes' == sys.argv[2] or 'apiservices' == sys.argv[2]:
                 for item in data['items']:
                     if item['metadata']['name'] == sys.argv[3]:
                         for status in item['status']['conditions']:
                             if status['type'] == sys.argv[4]:
                                 print(status['status'])
                                 break
-            if 'componentstatuses' == sys.argv[2]:
+            elif 'componentstatuses' == sys.argv[2]:
                 for item in data['items']:
                     if item['metadata']['name'] == sys.argv[3]:
                         for status in item['conditions']:
-                            if status['type'] == sys.argv[4]:
-                                print(status['status'])
-                                break
-            if 'apiservices' == sys.argv[2]:
-                for item in data['items']:
-                    if item['metadata']['name'] == sys.argv[3]:
-                        for status in item['status']['conditions']:
                             if status['type'] == sys.argv[4]:
                                 print(status['status'])
                                 break
