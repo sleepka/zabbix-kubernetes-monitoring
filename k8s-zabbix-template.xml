@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.2</version>
-    <date>2019-11-26T11:08:49Z</date>
+    <date>2019-12-23T01:52:05Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -584,7 +584,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Kubernetes:k8s.stats[pods,{#NAMESPACE},{#NAME},containerReady,{#CONTAINER}].str(True)}=0</expression>
+                            <expression>{Kubernetes:k8s.stats[pods,{#NAMESPACE},{#NAME},containerReady,{#CONTAINER}].str(True,#3)}=0 and {Kubernetes:k8s.stats[pods,{#NAMESPACE},{#NAME},containerReady,{#CONTAINER}].nodata(100)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>Pod {#NAME} container {#CONTAINER} (ns {#NAMESPACE}) is not in Ready State</name>
@@ -915,7 +915,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Kubernetes:k8s.stats[deployments,{#NAMESPACE},{#NAME},notUpdated].last()}&gt;0</expression>
+                            <expression>{Kubernetes:k8s.stats[deployments,{#NAMESPACE},{#NAME},notUpdated].min(#3)}&gt;0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>Deployment name {#NAME} (ns {#NAMESPACE}) number of not updated replicas &gt; 0</name>
@@ -931,7 +931,7 @@
                             <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Kubernetes:k8s.stats[deployments,{#NAMESPACE},{#NAME},statusReady].str(True)}=0</expression>
+                            <expression>{Kubernetes:k8s.stats[deployments,{#NAMESPACE},{#NAME},statusReady].str(True,#3)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>Deployment {#NAME} (ns {#NAMESPACE}) is not in Available Status</name>
