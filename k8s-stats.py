@@ -5,6 +5,9 @@ import sys
 import os
 import json
 import time
+#Needs for azure-fix to ignore selfsigned ssl cert 
+import ssl
+
 try:
     import urllib.request as urllib2
 except ImportError:
@@ -34,7 +37,13 @@ def rawdata(qtime=30):
         else:
             req = urllib2.Request(api_server + api_req)
             req.add_header('Authorization', 'Bearer ' + token)
-            rawdata = urllib2.urlopen(req).read()
+            #azure-fix to ignore selfsigned ssl cert
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            
+            req = urllib2.Request(api_server + api_req)
+            #
 
             file = open(tmp_file,'wb')
             file.write(rawdata)
