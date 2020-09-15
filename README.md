@@ -8,13 +8,13 @@
 4. Apply template to host
 
 ## How to retrieve TOKEN and API SERVER
-1. TOKEN:
+1. **TOKEN**:
 ```bash
 $ TOKENNAME=$(kubectl get sa/zabbix-user -n kube-system -o jsonpath='{.secrets[0].name}')
 $ TOKEN=$(kubectl -n kube-system get secret $TOKENNAME -o jsonpath='{.data.token}'| base64 --decode)
 $ echo $TOKEN
 ```
-2. API SERVER:
+2. **API SERVER**:
 ```bash
 $ APISERVER=https://$(kubectl -n default get endpoints kubernetes --no-headers | awk '{ print $2 }')
 $ echo $APISERVER
