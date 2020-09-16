@@ -97,8 +97,14 @@ if sys.argv[2] in targets:
                         elif 'containerReady' == sys.argv[5]:
                             for status in item['status']['containerStatuses']:
                                 if status['name'] == sys.argv[6]:
-                                    print(status['ready'])
-                                    break
+                                    for state in status['state']:
+                                        if state == 'terminated':
+                                            if status['state']['terminated']['reason'] == 'Completed':
+                                                print('True')
+                                                break
+                                    else:
+                                        print(status['ready'])
+                                        break
                         elif 'containerRestarts' == sys.argv[5]:
                             for status in item['status']['containerStatuses']:
                                 if status['name'] == sys.argv[6]:
